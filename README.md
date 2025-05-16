@@ -2,7 +2,7 @@
 
 🚀 **A sleek, interactive AI chatbot powered by Google's Gemini API**  
 
-![Bongo AI Chat Screenshot](./image.png)  
+![Bongo AI Chat Screenshot](./img.jpg)  
 
 ## 🌟 Features  
 
