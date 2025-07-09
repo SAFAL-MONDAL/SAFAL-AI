@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       userInput.style.height = "auto";
       userInput.style.height = userInput.scrollHeight + "px";
   });
-  
+
   chatForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const message = userInput.value.trim();
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
                       {
                           parts: [
                               {
-                                  text: prompt,
+                                  text: `Please format your response professionally with clear paragraphs, bullet points when appropriate, and proper spacing. The user asked: ${prompt}`,
                               },
                           ],
                       },
@@ -83,18 +83,54 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error("Failed to generate the response");
       }
       const data = await response.json();
-      return data.candidates[0].content.parts[0].text;
+      return formatResponse(data.candidates[0].content.parts[0].text);
   }
   
+  function formatResponse(text) {
+    // Convert markdown-like formatting to HTML
+    let formattedText = text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // bold
+      .replace(/\*(.*?)\*/g, '<em>$1</em>') // italic
+      .replace(/^-\s(.*$)/gm, '<li>$1</li>') // bullet points
+      .replace(/\n\n/g, '</p><p>') // paragraphs
+      .replace(/\n/g, '<br>'); // line breaks
+
+    // If we found list items, wrap them in ul
+    if (formattedText.includes('<li>')) {
+      formattedText = formattedText.replace(/(<li>.*<\/li>)+/g, '<ul>$&</ul>');
+    }
+
+    // Ensure we have proper paragraph tags
+    if (!formattedText.startsWith('<p>')) {
+      formattedText = '<p>' + formattedText;
+    }
+    if (!formattedText.endsWith('</p>')) {
+      formattedText = formattedText + '</p>';
+    }
+
+    return formattedText;
+  }
+
   function addMessage(text, isUser) {
       const message = document.createElement("div");
       message.className = `message ${isUser ? "user-message" : ""}`;
+      
+      const messageContent = document.createElement("div");
+      messageContent.className = "message-content";
+      
+      if (isUser) {
+        messageContent.textContent = text;
+      } else {
+        messageContent.innerHTML = text;
+      }
+      
       message.innerHTML = `
           <div class="avatar ${isUser ? "user-avatar" : ""}">
               ${isUser ? "U" : "AI"}
           </div>
-          <div class='message-content'>${text}</div>
       `;
+      
+      message.appendChild(messageContent);
       chatMessages.appendChild(message);
       chatMessages.scrollTop = chatMessages.scrollHeight;
   }

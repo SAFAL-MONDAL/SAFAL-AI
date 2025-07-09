@@ -172,6 +172,49 @@ body.light-theme .chat-container {
   transition: background-color var(--transition-time) ease;
 }
 
+.message-content p {
+  margin-bottom: 1em;
+}
+
+.message-content p:last-child {
+  margin-bottom: 0;
+}
+
+.message-content ul,
+.message-content ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.message-content li {
+  margin-bottom: 0.5em;
+}
+
+.message-content strong {
+  font-weight: 600;
+  color: #a5b4fc;
+}
+
+body.light-theme .message-content strong {
+  color: #6366f1;
+}
+
+.message-content em {
+  font-style: italic;
+}
+
+.message-content code {
+  font-family: 'Courier New', Courier, monospace;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+body.light-theme .message-content code {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 body.light-theme .message-content {
   background: rgba(241, 245, 249, 0.9);
   color: #1e293b;
